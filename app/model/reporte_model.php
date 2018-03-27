@@ -8,7 +8,7 @@ class ReporteModel
     private $db;
     private $response;
     
-    public function __CONSTRUCT($db)
+    public function __construct($db)
     {
         $this->db = $db;
         $this->response = new Response();

@@ -18,20 +18,23 @@ $container['logger'] = function ($c) {
 };
 
 // Se registra la coneccion a base de datos
-$container['db'] = function($c){
+$container['db'] = function ($c) {
     $connectionString = $c->get('settings')['connectionString'];
-    
+
     $pdo = new PDO($connectionString['dns'], $connectionString['user'], $connectionString['pass']);
 
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 
-    return new FluentPDO($pdo); 
+    return new FluentPDO($pdo);
 };
 
 // Se registran los modelos
-$container['model'] = function($c){
-    return (object)[
-        'rol' => new App\Model\RolModel($c->db)
+$container['model'] = function ($c) {
+    return (object) [
+        'rol' => new App\Model\RolModel($c->db),
+        'paginaCategoria' => new App\Model\PaginaCategoriaModel($c->db),
+        'pagina' => new App\Model\PaginaModel($c->db),
+        'usuario' => new App\Model\UsuarioModel($c->db),
     ];
 };

@@ -9,7 +9,7 @@ class PedidoModel
     private $table = 'pedido';
     private $response;
     
-    public function __CONSTRUCT($db)
+    public function __construct($db)
     {
         $this->db = $db;
         $this->response = new Response();

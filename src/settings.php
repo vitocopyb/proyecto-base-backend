@@ -1,4 +1,5 @@
 <?php
+
 return [
     'settings' => [
         'displayErrorDetails' => true,
@@ -13,13 +14,22 @@ return [
             'name' => 'slim-app',
             'path' => __DIR__ . '/../logs/app.log',
         ],
-        
+
         // Configuración de mi APP
-        'app_token_name'   => 'APP-TOKEN',
+        'app_token_name' => 'APP-TOKEN',
         'connectionString' => [
-            'dns'  => 'mysql:host=localhost;dbname=proyecto_base;charset=utf8',
+            'dns' => 'mysql:host=localhost;dbname=proyecto_base;charset=utf8',
             'user' => 'root',
-            'pass' => ''
-        ]
+            'pass' => '',
+        ],
     ],
 ];
+
+/*
+        'connectionString' => [
+            'dns' => 'mysql:host=localhost;dbname=id5170987_proyecto_base;charset=utf8',
+            'user' => 'id5170987_proyectobase',
+            'pass' => '$TestVSR#',
+        ],
+
+*/

@@ -1,93 +1,138 @@
 <?php
+
 namespace App\Model;
 
-use App\Lib\Response, Exception;
+use Exception;
 
 class RolModel
 {
     private $db;
     private $table = 'rol';
-    private $response;
-    
-    public function __CONSTRUCT($db)
+
+    public function __construct($db)
     {
         $this->db = $db;
-        $this->response = new Response();
     }
-    
-    public function listar($l, $p)
+
+    // ===============================================================
+    // crea un nuevo rol
+    // ===============================================================
+    public function crear($data)
     {
+        $respuesta = [];
 
-        try {
-            // throw new Exception('Division por cero.');
-
-            $data = $this->db->from($this->table)
-                            ->limit($l)
-                            ->offset($p)
-                            ->orderBy('IdRol DESC')
-                            ->fetchAll();
-
-            $total = $this->db->from($this->table)
-                            ->select('COUNT(IdRol) Total')
-                            ->fetch()
-                            ->Total;
-            return [
-                'roles' => $data,
-                'total' => $total
-            ];
-
-        } catch (Exception $e) {
-            // echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-            return [
-                'errors' => $e->getMessage()
-            ];
-        }
-
-    }
-  
-    public function obtener($id)
-    {
-      return $this->db->from($this->table)
-                    ->where("IdRol", $id)
-                    ->fetch();
-    }
-    
-    public function guardar($data) {
         try {
             // elimina campo para que lo grabe autoincremental
             unset($data['idRol']);
 
-            $this->db->insertInto($this->table, $data)
-                    ->execute();
-    
-            // return $this->response->SetResponse(true);
-            return [
-                'respuesta' => true
-            ];
+            $this->db
+                ->insertInto($this->table, $data)
+                ->execute();
         } catch (Exception $e) {
-            // echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-            return [
-                'errors' => $e->getMessage()
+            $respuesta = [
+                'exception' => [$e->getMessage()],
             ];
         }
+
+        return $respuesta;
     }
 
+    // ===============================================================
+    // actualiza un rol
+    // ===============================================================
     public function actualizar($data, $id)
     {
-        $this->db->update($this->table, $data)
-                ->where("IdRol", $id)
-                ->execute();
+        $respuesta = [];
 
-      return $this->response->SetResponse(true);
+        try {
+            $this->db
+                ->update($this->table, $data)
+                ->where("idRol", $id)
+                ->execute();
+        } catch (Exception $e) {
+            $respuesta = [
+                'exception' => [$e->getMessage()],
+            ];
+        }
+
+        return $respuesta;
     }
 
+    // ===============================================================
+    // elimina un rol
+    // ===============================================================
     public function eliminar($id)
     {
-        $this->db->deleteFrom($this->table)
-                ->where("IdRol", $id)
+        $respuesta = [];
+
+        try {
+            $this->db
+                ->deleteFrom($this->table)
+                ->where("idRol", $id)
                 ->execute();
-        
-        return $this->response->SetResponse(true);
+        } catch (Exception $e) {
+            $respuesta = [
+                'exception' => [$e->getMessage()],
+            ];
+        }
+
+        return $respuesta;
+    }
+
+    // ===============================================================
+    // obtiene los roles
+    // ===============================================================
+    public function listar($limit, $offset)
+    {
+        $respuesta = [];
+
+        try {
+            $data = $this->db->from($this->table)
+                ->limit($limit)
+                ->offset($offset)
+                ->orderBy('idRol DESC')
+                ->fetchAll();
+
+            $total = $this->db->from($this->table)
+                ->select('COUNT(idRol) Total')
+                ->fetch()
+                ->Total;
+
+            $respuesta = [
+                'roles' => $data,
+                'total' => $total,
+            ];
+        } catch (Exception $e) {
+            $respuesta = [
+                'exception' => [$e->getMessage()],
+            ];
+        }
+
+        return $respuesta;
+    }
+
+    // ===============================================================
+    // obtiene rol por id
+    // ===============================================================
+    public function obtener($id)
+    {
+        $respuesta = [];
+
+        try {
+            $data = $this->db->from($this->table)
+                ->where("idRol", $id)
+                ->fetch();
+
+            $respuesta = [
+                'rol' => $data,
+            ];
+        } catch (Exception $e) {
+            $respuesta = [
+                'exception' => [$e->getMessage()],
+            ];
+        }
+
+        return $respuesta;
     }
 
 }
